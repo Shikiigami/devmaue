@@ -1,52 +1,37 @@
-// netlify/functions/submit-form.js
-const { Client } = require("pg");
+import { Client } from "pg";
 
-exports.handler = async (event) => {
+export async function handler(event, context) {
   if (event.httpMethod !== "POST") {
     return {
       statusCode: 405,
-      body: JSON.stringify({ success: false, message: "Method Not Allowed" }),
+      body: JSON.stringify({ message: "Method Not Allowed" })
     };
   }
 
   try {
     const data = JSON.parse(event.body);
+
     const client = new Client({
-      connectionString: 'postgresql://neondb_owner:npg_oF3KVPWzdAm8@ep-tiny-credit-aejm8qsz-pooler.c-2.us-east-2.aws.neon.tech/neondb?sslmode=require&channel_binding=require', 
-      ssl: { rejectUnauthorized: false }, 
+      connectionString: 'postgresql://neondb_owner:npg_oF3KVPWzdAm8@ep-tiny-credit-aejm8qsz-pooler.c-2.us-east-2.aws.neon.tech/neondb?sslmode=require&channel_binding=require',
+      ssl: { rejectUnauthorized: false }
     });
 
     await client.connect();
     await client.query(
-      "INSERT INTO messages (name, email, message, created_at) VALUES ($1, $2, $3, NOW())",
+      "INSERT INTO messages(name, email, message) VALUES($1, $2, $3)",
       [data.name, data.email, data.message]
     );
-
     await client.end();
 
     return {
       statusCode: 200,
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-      },
-      body: JSON.stringify({
-        success: true,
-        message: "Form saved to PostgreSQL!",
-      }),
+      body: JSON.stringify({ success: true, message: "Data saved!" })
     };
   } catch (err) {
-    console.error("DB Error:", err);
+    console.error(err);
     return {
       statusCode: 500,
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-      },
-      body: JSON.stringify({
-        success: false,
-        message: "Database error. Check logs.",
-      }),
+      body: JSON.stringify({ success: false, message: "Error saving data" })
     };
   }
-};
+}

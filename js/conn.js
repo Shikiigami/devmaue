@@ -9,13 +9,15 @@ form.addEventListener('submit', async (e) => {
   };
 
   try {
-    const res = await fetch('/.netlify/functions/submit-form', {
+    const res = await fetch('/.netlify/functions/submit-form', { // ✅ updated URL
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data)
     });
 
-    if (res.ok) {
+    const result = await res.json();
+
+    if (result.success) {
       Swal.fire({
         icon: 'success',
         title: 'Sent!',
@@ -23,7 +25,7 @@ form.addEventListener('submit', async (e) => {
         showConfirmButton: false,
         timer: 2000
       });
-      form.reset(); 
+      form.reset(); // Clear form
     } else {
       Swal.fire({
         icon: 'error',
