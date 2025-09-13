@@ -23,3 +23,22 @@
     backface-visibility: hidden;
   }
 
+  .neon-text {
+    color: #00f0ff; 
+    text-shadow:
+      0 0 5px #00f0ff,
+      0 0 10px #00f0ff,
+      0 0 20px #00f0ff,
+      0 0 40px #00f0ff,
+      0 0 80px #00f0ff;
+  }
+
+  /* Blinking cursor */
+  @keyframes blink {
+    0%, 50%, 100% { opacity: 1; }
+    25%, 75% { opacity: 0; }
+  }
+  .blinking-cursor {
+    animation: blink 1s step-start infinite;
+    color: #00f0ff; /* match neon color */
+  }
