@@ -18,7 +18,7 @@ export async function handler(event, context) {
 
     await client.connect();
     await client.query(
-      "INSERT INTO messages(name, email, message) VALUES($1, $2, $3)",
+      "INSERT INTO messages(name, email, message, created_at) VALUES($1, $2, $3, now())",
       [data.name, data.email, data.message]
     );
     await client.end();
