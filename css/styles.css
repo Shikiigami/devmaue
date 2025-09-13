@@ -46,3 +46,17 @@
     animation: blink 1s step-start infinite;
     color: #00f0ff; /* match neon color */
   }
+
+  .toast-success {
+  background-color: #00f0ff !important; /* neon blue */
+  color: #000 !important;
+  font-weight: bold;
+  text-shadow: 0 0 5px #00f0ff;
+}
+
+.toast-error {
+  background-color: #ff5f00 !important; /* neon orange */
+  color: #000 !important;
+  font-weight: bold;
+  text-shadow: 0 0 5px #ff5f00;
+}
