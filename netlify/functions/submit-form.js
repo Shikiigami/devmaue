@@ -11,10 +11,8 @@ exports.handler = async (event) => {
 
   try {
     const data = JSON.parse(event.body);
-
-    // Connect to Neon PostgreSQL
     const client = new Client({
-      connectionString: process.env.DATABASE_URL, 
+      connectionString: 'postgresql://neondb_owner:npg_oF3KVPWzdAm8@ep-tiny-credit-aejm8qsz-pooler.c-2.us-east-2.aws.neon.tech/neondb?sslmode=require&channel_binding=require', 
       ssl: { rejectUnauthorized: false }, 
     });
 
