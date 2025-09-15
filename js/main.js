@@ -13,7 +13,7 @@ const flipCard = document.getElementById("flip-card");
     } else {
       flipCard.style.transform = "rotateY(0deg)";
     }
-  }, 3000); 
+  }, 4000); 
 
 const texts = ["Hi, I'm Mau :)", "I love coding", "Welcome to my portfolio"];
 let currentText = '';
