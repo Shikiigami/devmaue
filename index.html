@@ -6,6 +6,7 @@
   <title>My Portfolio</title>
   <link rel="icon" type="image/png" href="./images/mylogo.png">
   <link rel="stylesheet" href="./css/styles.css" />
+
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
   
   
@@ -24,29 +25,39 @@
     </h1>
 
     <!-- Desktop Menu -->
-    <ul class="hidden md:flex space-x-6 text-gray-300 font-medium">
-      <template x-for="item in [
-        { id: 'about', label: 'About' },
-        { id: 'services', label: 'Services' },
-        { id: 'skills', label: 'Skills' },
-        { id: 'education', label: 'Education' },
-        { id: 'experience', label: 'Experience' },
-        { id: 'projects', label: 'Projects' },
-        { id: 'achievements', label: 'Achievements' },
-        { id: 'contact', label: 'Contact' }
-      ]" :key="item.id">
-        <li>
-          <a :href="'#' + item.id"
-             @click="active = item.id"
-             :class="active === item.id 
-               ? 'text-blue-400 border-b-2 border-blue-400 pb-1' 
-               : 'hover:text-blue-400 transition'"
-             class="transition duration-300">
-            <span x-text="item.label"></span>
-          </a>
-        </li>
-      </template>
-    </ul>
+<ul class="hidden md:flex space-x-6 font-medium">
+  <template x-for="item in [
+    { id: 'about', label: 'About' },
+    { id: 'services', label: 'Services' },
+    { id: 'skills', label: 'Skills' },
+    { id: 'education', label: 'Education' },
+    { id: 'experience', label: 'Experience' },
+    { id: 'projects', label: 'Projects' },
+    { id: 'achievements', label: 'Achievements' },
+    { id: 'contact', label: 'Contact' }
+  ]" :key="item.id">
+    <li class="relative group">
+      <a :href="'#' + item.id"
+         @click="active = item.id"
+         class="relative px-2 py-1 transition-all duration-300"
+         :class="active === item.id
+           ? 'text-cyan-400 neon-active'
+           : 'text-gray-300 hover:text-cyan-400'">
+
+        <!-- Text -->
+        <span x-text="item.label" class="relative z-10"></span>
+
+        <!-- Neon underline -->
+        <span
+          class="absolute left-0 -bottom-1 w-full h-[2px] scale-x-0 bg-cyan-400
+                 group-hover:scale-x-100 transition-transform duration-300 origin-left
+                 shadow-[0_0_10px_#22d3ee]">
+        </span>
+      </a>
+    </li>
+  </template>
+</ul>
+
 
     <!-- Mobile Hamburger -->
     <button @click="open = !open" class="md:hidden text-gray-300 focus:outline-none">
@@ -92,37 +103,40 @@
   </div>
 </nav>
 
-  <!-- Hero Section -->
-  <section class="min-h-screen flex flex-col justify-center items-center text-center px-6 pt-24">
-  <!-- Flip Container -->
-    <div class="relative w-80 h-80 perspective">
+
+<section class="relative z-0 min-h-screen flex flex-col justify-center items-center text-center px-6 pt-24 overflow-hidden">
+  
+  <canvas id="starfield" class="absolute inset-0 -z-10 w-full h-full bg-transparent"></canvas>
+  <div class="relative w-80 h-80 perspective">
     <div id="flip-card" class="w-full h-full transition-transform duration-700 [transform-style:preserve-3d]">
-      <!-- Front Image -->
       <div class="absolute inset-0 backface-hidden">
-        <img src="./images/mylogo4.png" alt="Profile 1"
-            class="w-full h-full object-contain" />
+        <img src="./images/mylogo4.png" alt="Profile 1" class="w-full h-full object-contain" />
       </div>
-      <!-- Back Image -->
       <div class="absolute inset-0 backface-hidden [transform:rotateY(180deg)]">
-        <img src="./images/mylogo2.png" alt="Profile 2"
-            class="w-full h-full object-contain" />
+        <img src="./images/mylogo2.png" alt="Profile 2" class="w-full h-full object-contain" />
       </div>
     </div>
   </div>
 
-
-<h2 class="mt-6 text-4xl md:text-6xl font-bold neon-text computer-font"><span id="typing"></span>
-<span class="blinking-cursor">|</span>
-</h2>
+  <h2 class="mt-6 text-4xl md:text-6xl font-bold neon-text computer-font">
+    <span id="typing"></span>
+    <span class="blinking-cursor">|</span>
+  </h2>
 
   <p class="mt-4 max-w-lg text-lg text-gray-300 animate-fade-in-up delay-200">
     A passionate <span class="text-blue-300">Freelancer</span> who creates smooth, dynamic, and modern web experiences.
   </p>
-  <a href="#projects"
-     class="mt-6 px-6 py-3 bg-blue-500 text-white rounded-xl shadow-lg hover:bg-blue-600 transition transform hover:scale-105 animate-fade-in-up delay-300">
+
+  <a href="#projects" id="view-work-btn"
+     class="mt-10 px-6 py-3 text-white rounded-xl font-semibold
+            bg-gradient-to-r from-cyan-400 to-blue-600
+            shadow-[0_0_20px_#38bdf8]
+            hover:shadow-[0_0_35px_#38bdf8]
+            transition-all duration-300
+            transform hover:scale-110
+            animate-bounce">
     View My Work
   </a>
-  <br>
 </section>
 
   <!-- About Section -->
@@ -665,5 +679,6 @@
 <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
 <script src="./js/main.js"></script>
 <script src="./js/conn.js"></script>
+ <script src="./js/canvas.js"></script>
 </body>
 </html>

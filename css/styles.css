@@ -60,3 +60,38 @@
   font-weight: bold;
   text-shadow: 0 0 5px #ff5f00;
 }
+/* Neon glow */
+.neon-active {
+  text-shadow:
+    0 0 5px #22d3ee,
+    0 0 15px #22d3ee,
+    0 0 30px #22d3ee;
+}
+
+/* Pulse for active item */
+@keyframes neonPulse {
+  0%, 100% { text-shadow: 0 0 6px #22d3ee, 0 0 20px #22d3ee; }
+  50% { text-shadow: 0 0 12px #22d3ee, 0 0 35px #22d3ee; }
+}
+.animate-neon-pulse {
+  animation: neonPulse 1.8s infinite;
+}
+
+/* Energy sweep */
+@keyframes energySweep {
+  from { transform: translateX(-100%); }
+  to   { transform: translateX(100%); }
+}
+.animate-energy-sweep {
+  animation: energySweep 1s linear;
+}
+
+/* Subtle flicker */
+.group:hover a span {
+  animation: flicker 0.15s alternate 3;
+}
+
+@keyframes flicker {
+  from { opacity: 0.7; }
+  to { opacity: 1; }
+}
