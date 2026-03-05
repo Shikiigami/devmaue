@@ -566,61 +566,132 @@
   </div>
 </section>
 
+
 <!-- Achievements Section -->
 <section id="achievements" class="py-20 bg-gray-800">
   <div class="max-w-6xl mx-auto px-6">
-    <h2 class="text-3xl font-bold text-blue-400 mb-8 text-center">My Awards / Certificates</h2>
+    
+    <h2 class="text-3xl font-bold text-blue-400 mb-8 text-center">
+      My Awards / Certificates
+    </h2>
 
-    <!-- Gallery Preview -->
-    <div class="relative w-full max-w-xl mx-auto" x-data="{ open: false, current: 0, images: [
-      'images/1.jpg',
-      'images/2.jpg',
-      'images/3.jpg',
-      'images/4.jpg',
-      'images/5.jpg',
-      'images/6.jpg',
-      'images/7.jpg',
-      'images/8.jpg',
-      'images/9.jpg',
-      'images/5G-Unleashed.jpg'
-    ]}">
-      <!-- Stack Effect -->
-      <div class="relative flex flex-col items-center">
-          <h3 class="text-xl font-semibold text-gray-800 mb-4 text-center">
-            Awards & Certificates
-          </h3>
+    <div class="relative w-full max-w-xl mx-auto"
+         x-data="{
+          open:false,
+          current:0,
+          images:[
+            'images/1.jpg',
+            'images/2.jpg',
+            'images/3.jpg',
+            'images/4.jpg',
+            'images/5.jpg',
+            'images/6.jpg',
+            'images/7.jpg',
+            'images/8.jpg',
+            'images/9.jpg',
+            'images/5G-Unleashed.jpg'
+          ]
+         }">
 
-      <div class="relative cursor-pointer w-2/3 md:w-1/2" @click="open = true; current = 0">
-        <img :src="images[0]" alt="Preview" class="rounded-xl shadow-lg relative z-30 w-full">
-        <img :src="images[1]" alt="" class="rounded-xl shadow-lg absolute top-3 left-3 w-full z-20 opacity-90">
-        <img :src="images[2]" alt="" class="rounded-xl shadow-lg absolute top-6 left-6 w-full z-10 opacity-80">
-      </div>
-    </div>
+      <!-- STACKED CARDS PREVIEW -->
+      <div class="flex justify-center">
+        <div class="relative w-72 h-48 cursor-pointer group"
+             @click="open = true; current = 0">
 
+          <!-- Card 3 -->
+          <img :src="images[2]"
+               class="absolute w-full rounded-xl shadow-xl
+               transform rotate-[-8deg] translate-x-[-10px] translate-y-[10px]
+               transition-all duration-500
+               group-hover:rotate-[-15deg] group-hover:-translate-x-16">
 
-      <!-- Modal -->
-      <div x-show="open" class="fixed inset-0 bg-black/80 flex items-center justify-center z-50" x-transition>
-        <div class="relative max-w-4xl w-full p-4">
-          <!-- Close -->
-          <button @click="open = false" class="absolute top-4 right-4 text-white text-3xl font-bold">&times;</button>
-          <div class="flex items-center justify-center">
-            <button @click="current = (current - 1 + images.length) % images.length" class="text-white text-4xl px-4">&#10094;</button>  
-            <img :src="images[current]" alt="Certificate" class="max-h-[80vh] rounded-lg shadow-xl mx-4">
-            <button @click="current = (current + 1) % images.length" class="text-white text-4xl px-4">&#10095;</button>
-          </div>
-          <!-- Thumbnails -->
-          <div class="flex gap-2 mt-4 justify-center overflow-x-auto">
-            <template x-for="(img, index) in images" :key="index">
-              <img :src="img" @click="current = index"
-                   class="w-20 h-16 object-cover rounded cursor-pointer border-2"
-                   :class="index === current ? 'border-blue-400' : 'border-transparent'">
-            </template>
-          </div>
+          <!-- Card 2 -->
+          <img :src="images[1]"
+               class="absolute w-full rounded-xl shadow-xl
+               transform rotate-[5deg] translate-x-[10px] translate-y-[5px]
+               transition-all duration-500
+               group-hover:rotate-[12deg] group-hover:translate-x-16">
+
+          <!-- Card 1 (Top Card) -->
+          <img :src="images[0]"
+               class="absolute w-full rounded-xl shadow-2xl
+               transition duration-500
+               group-hover:-translate-y-4 group-hover:scale-105">
         </div>
       </div>
+
+
+      <!-- MODAL -->
+      <div x-show="open"
+           x-transition:enter="transition ease-out duration-300"
+           x-transition:enter-start="opacity-0 scale-90"
+           x-transition:enter-end="opacity-100 scale-100"
+           x-transition:leave="transition ease-in duration-200"
+           x-transition:leave-start="opacity-100 scale-100"
+           x-transition:leave-end="opacity-0 scale-90"
+           class="fixed inset-0 bg-black/80 flex items-center justify-center z-50">
+
+        <div class="relative max-w-5xl w-full p-4">
+
+          <!-- Close Button -->
+          <button @click="open = false"
+                  class="absolute top-4 right-6 text-white text-4xl hover:scale-125 transition">
+            &times;
+          </button>
+
+          <!-- Image Viewer -->
+          <div class="flex items-center justify-center w-full">
+
+          <!-- Left Arrow -->
+          <button
+            @click="current = (current - 1 + images.length) % images.length"
+            class="text-white text-6xl px-6 hover:scale-125 transition">
+            &#10094;
+          </button>
+
+          <!-- Large Certificate -->
+          <div class="relative flex justify-center items-center w-full">
+
+              <template x-for="(img,index) in images" :key="index">
+                  <img
+                      x-show="current === index"
+                      :src="img"
+                      x-transition:enter="transition transform duration-500"
+                      x-transition:enter-start="opacity-0 scale-90"
+                      x-transition:enter-end="opacity-100 scale-100"
+                      class="max-h-[90vh] max-w-[90vw] object-contain rounded-lg shadow-2xl">
+              </template>
+
+          </div>
+
+          <!-- Right Arrow -->
+          <button
+            @click="current = (current + 1) % images.length"
+            class="text-white text-6xl px-6 hover:scale-125 transition">
+            &#10095;
+          </button>
+
+      </div>
+
+            <!-- THUMBNAILS -->
+            <div class="flex gap-3 mt-6 justify-center overflow-x-auto pb-2">
+
+              <template x-for="(img,index) in images" :key="index">
+                <img :src="img"
+                    @click="current = index"
+                    class="w-24 h-16 object-cover rounded cursor-pointer border-2
+                            transform hover:scale-110 transition duration-300"
+                    :class="index === current ? 'border-blue-400 scale-110' : 'border-transparent'">
+              </template>
+
+            </div>
+
+          </div>
+        </div>
+
+      </div>
     </div>
-  </div>
-</section>
+  </section>
 
  <!-- Contact Section -->
 <section id="contact" class="py-20 bg-gray-600">
@@ -677,6 +748,7 @@
 <script src="https://unpkg.com/@tailwindcss/typography"></script>
 <script src="https://unpkg.com/lucide@latest"></script>
 <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+<script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
 <script src="./js/main.js"></script>
 <script src="./js/conn.js"></script>
  <script src="./js/canvas.js"></script>
