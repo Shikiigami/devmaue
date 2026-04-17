@@ -233,3 +233,323 @@
       50%      { transform: translateY(-5px); }
     }
   }
+
+
+/* ============================================================
+   LIGHT MODE OVERRIDES
+   ============================================================ */
+
+/* ── Fancy Day/Night Toggle ── */
+#theme-toggle {
+  cursor: pointer !important;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.tt-track {
+  position: relative;
+  width: 58px;
+  height: 28px;
+  border-radius: 999px;
+  overflow: hidden;
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+  box-shadow: inset 0 2px 6px rgba(0,0,0,0.5), 0 1px 3px rgba(0,0,0,0.4);
+  transition: background 0.5s ease;
+}
+
+/* Stars (visible in dark mode) */
+.tt-stars {
+  position: absolute;
+  inset: 0;
+  opacity: 1;
+  transition: opacity 0.4s ease;
+}
+.tt-star {
+  position: absolute;
+  background: #fff;
+  border-radius: 50%;
+}
+.s1 { width: 2px; height: 2px; top: 5px;  right: 8px;  box-shadow: 0 0 3px #fff; }
+.s2 { width: 2px; height: 2px; top: 14px; right: 14px; box-shadow: 0 0 2px #fff; }
+.s3 { width: 1.5px; height: 1.5px; top: 7px; right: 22px; }
+.s4 { width: 1.5px; height: 1.5px; top: 18px; right: 6px; }
+.s5 { width: 2px; height: 2px; top: 10px; right: 18px; box-shadow: 0 0 3px #fff; }
+
+/* Clouds (visible in light mode) */
+.tt-clouds {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+.tt-cloud {
+  position: absolute;
+  background: rgba(255,255,255,0.85);
+  border-radius: 999px;
+}
+.c1 {
+  width: 28px; height: 10px;
+  bottom: 4px; left: 4px;
+}
+.c1::before {
+  content: '';
+  position: absolute;
+  width: 14px; height: 14px;
+  background: rgba(255,255,255,0.85);
+  border-radius: 50%;
+  top: -7px; left: 6px;
+}
+.c2 {
+  width: 18px; height: 7px;
+  bottom: 10px; left: 10px;
+  opacity: 0.6;
+}
+
+/* Ripple rings inside track */
+.tt-rings {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 2px;
+  pointer-events: none;
+}
+.tt-ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 2px solid rgba(255,255,255,0.07);
+  right: 2px;
+  top: 50%;
+  transform: translateY(-50%);
+  transition: border-color 0.4s;
+}
+.r1 { width: 36px; height: 36px; }
+.r2 { width: 48px; height: 48px; }
+
+/* Thumb */
+.tt-thumb {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%) translateX(3px);
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 40% 35%, #e2e8f0, #94a3b8);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.5), inset 0 1px 2px rgba(255,255,255,0.3);
+  transition: transform 0.4s cubic-bezier(.34,1.56,.64,1), background 0.4s;
+  z-index: 10;
+}
+
+/* Moon craters */
+.tt-crater {
+  position: absolute;
+  background: rgba(100,116,139,0.5);
+  border-radius: 50%;
+  transition: opacity 0.3s;
+}
+.cr1 { width: 6px; height: 6px; top: 4px; left: 5px; }
+.cr2 { width: 4px; height: 4px; top: 11px; left: 12px; }
+
+/* ── is-light state ── */
+#theme-toggle.is-light .tt-track {
+  background: linear-gradient(135deg, #38bdf8 0%, #0ea5e9 50%, #1d6fa8 100%);
+}
+#theme-toggle.is-light .tt-thumb {
+  transform: translateY(-50%) translateX(31px);
+  background: radial-gradient(circle at 40% 35%, #fef08a, #facc15);
+  box-shadow: 0 0 10px rgba(250,204,21,0.7), 0 2px 6px rgba(0,0,0,0.3);
+}
+#theme-toggle.is-light .tt-stars { opacity: 0; }
+#theme-toggle.is-light .tt-clouds { opacity: 1; }
+#theme-toggle.is-light .tt-crater { opacity: 0; }
+#theme-toggle.is-light .tt-ring {
+  border-color: rgba(255,255,255,0.18);
+}
+
+/* ── Light mode base ── */
+body.light-mode {
+  background-color: #f0f4f8;
+  color: #1a202c;
+}
+
+/* Nav */
+body.light-mode nav {
+  background-color: rgba(255, 255, 255, 0.92) !important;
+  box-shadow: 0 1px 10px rgba(0,0,0,0.1);
+}
+body.light-mode nav ul a {
+  color: #2d3748 !important;
+}
+body.light-mode nav ul a:hover,
+body.light-mode nav ul a.neon-active {
+  color: #0891b2 !important;
+}
+body.light-mode .neon-active {
+  text-shadow:
+    0 0 5px #0891b2,
+    0 0 15px #0891b2,
+    0 0 30px #0891b2;
+}
+body.light-mode .neon-text {
+  color: #0369a1;
+  text-shadow:
+    0 0 5px #38bdf8,
+    0 0 10px #38bdf8,
+    0 0 20px #38bdf8;
+}
+body.light-mode .blinking-cursor {
+  color: #0369a1;
+}
+
+/* Mobile dropdown */
+body.light-mode nav > div:last-child {
+  background-color: rgba(240, 244, 248, 0.97) !important;
+}
+body.light-mode nav ul.flex-col a {
+  color: #2d3748 !important;
+}
+
+/* Hero section */
+body.light-mode section:first-of-type {
+  background-color: #e8f0f7;
+}
+body.light-mode #starfield {
+  opacity: 0.35;
+}
+body.light-mode section:first-of-type p {
+  color: #4a5568 !important;
+}
+body.light-mode section:first-of-type .text-blue-300 {
+  color: #0369a1 !important;
+}
+body.light-mode #view-work-btn {
+  background: linear-gradient(to right, #0891b2, #1d4ed8);
+  box-shadow: 0 0 20px rgba(8, 145, 178, 0.5);
+}
+body.light-mode #view-work-btn:hover {
+  box-shadow: 0 0 35px rgba(8, 145, 178, 0.7);
+}
+
+/* About section */
+body.light-mode #about {
+  background-color: #dde8f2 !important;
+}
+body.light-mode #about p {
+  color: #374151 !important;
+}
+body.light-mode #about .text-blue-400 {
+  color: #1d4ed8 !important;
+}
+
+/* Services section */
+body.light-mode #services {
+  background-color: #c8daea !important;
+}
+body.light-mode #services .text-blue-500 {
+  color: #1d4ed8 !important;
+}
+body.light-mode #services .text-blue-400 {
+  color: #1e40af !important;
+}
+
+/* Skills section */
+body.light-mode #skills {
+  background-color: #d6e4ef !important;
+}
+body.light-mode #skills .text-blue-400 {
+  color: #1d4ed8 !important;
+}
+body.light-mode #skills .text-gray-100 {
+  color: #1e293b !important;
+}
+body.light-mode #skills .bg-gray-200 {
+  background-color: #cbd5e1 !important;
+}
+body.light-mode #skills .bg-gradient-to-r {
+  background: linear-gradient(to right, #1e3a5f, #1d4ed8) !important;
+}
+
+/* Education section */
+body.light-mode #education {
+  background: linear-gradient(to bottom, #c8d9e6, #a8c0d4) !important;
+}
+
+/* Experience section */
+body.light-mode #experience {
+  background-color: #dce8f0 !important;
+}
+body.light-mode #experience .text-blue-400 {
+  color: #1d4ed8 !important;
+}
+
+/* Projects section */
+body.light-mode #projects {
+  background-color: #b8cfe0 !important;
+}
+body.light-mode #projects .text-blue-900 {
+  color: #1e3a8a !important;
+}
+
+/* Achievements section */
+body.light-mode #achievements {
+  background-color: #d0e2ef !important;
+}
+body.light-mode #achievements h2 {
+  background: linear-gradient(to right, #0369a1, #7c3aed);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Contact section */
+body.light-mode #contact {
+  background-color: #c0d6e8 !important;
+}
+body.light-mode #contact .text-blue-400 {
+  color: #1d4ed8 !important;
+}
+body.light-mode #contact .text-gray-300 {
+  color: #4b5563 !important;
+}
+body.light-mode #contact .bg-gray-800 {
+  background-color: #e8eff7 !important;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+}
+body.light-mode #contact .bg-gray-700 {
+  background-color: #d0dde8 !important;
+}
+body.light-mode #contact input,
+body.light-mode #contact textarea {
+  background-color: #d0dde8 !important;
+  color: #1a202c !important;
+  border: 1px solid #94b4c8;
+}
+body.light-mode #contact input::placeholder,
+body.light-mode #contact textarea::placeholder {
+  color: #6b7280 !important;
+}
+body.light-mode #contact label {
+  color: #1e3a5f !important;
+}
+body.light-mode #contact button[type="submit"] {
+  background-color: #1d4ed8;
+}
+body.light-mode #contact button[type="submit"]:hover {
+  background-color: #1e40af;
+}
+
+/* Footer */
+body.light-mode footer {
+  background-color: #c0d0dc !important;
+  color: #4b5563 !important;
+}
+
+/* Toggle in light mode - handled by is-light class above */
+
+/* Social icons in light mode */
+body.light-mode .si-btn {
+  background: rgba(240, 244, 248, 0.9) !important;
+  border-color: rgba(0,0,0,0.1) !important;
+}

@@ -8,9 +8,8 @@
   <link rel="stylesheet" href="./css/styles.css" />
 
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
-  
-  
-  
+  <!-- Prevent flash: force dark before page renders -->
+  <script>if (localStorage.getItem('theme') !== 'light') { document.body && document.body.classList.remove('light-mode'); }</script>
 </head>
 <body class="bg-gray-900 text-gray-200 font-sans">
 
@@ -58,20 +57,54 @@
   </template>
 </ul>
 
+    <!-- Theme Toggle + Mobile Hamburger -->
+    <div class="flex items-center gap-3">
 
-    <!-- Mobile Hamburger -->
-    <button @click="open = !open" class="md:hidden text-gray-300 focus:outline-none">
-      <!-- Hamburger -->
-      <svg x-show="!open" xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24"
-        stroke="currentColor" stroke-width="2">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
-      </svg>
-      <!-- Close (X) -->
-      <svg x-show="open" xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24"
-        stroke="currentColor" stroke-width="2">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-      </svg>
-    </button>
+      <!-- Theme Toggle Switch -->
+      <div id="theme-toggle" title="Toggle light/dark mode">
+        <div class="tt-track">
+          <!-- Dark side: stars -->
+          <div class="tt-stars">
+            <span class="tt-star s1"></span>
+            <span class="tt-star s2"></span>
+            <span class="tt-star s3"></span>
+            <span class="tt-star s4"></span>
+            <span class="tt-star s5"></span>
+          </div>
+          <!-- Light side: clouds -->
+          <div class="tt-clouds">
+            <div class="tt-cloud c1"></div>
+            <div class="tt-cloud c2"></div>
+          </div>
+          <!-- Ripple rings -->
+          <div class="tt-rings">
+            <div class="tt-ring r1"></div>
+            <div class="tt-ring r2"></div>
+          </div>
+          <!-- Thumb -->
+          <div class="tt-thumb">
+            <!-- Moon craters (dark mode) -->
+            <div class="tt-crater cr1"></div>
+            <div class="tt-crater cr2"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mobile Hamburger -->
+      <button @click="open = !open" class="md:hidden text-gray-300 focus:outline-none">
+        <!-- Hamburger -->
+        <svg x-show="!open" xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24"
+          stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+        <!-- Close (X) -->
+        <svg x-show="open" xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24"
+          stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+
+    </div>
   </div>
 
   <!-- Mobile Dropdown -->
@@ -286,13 +319,6 @@
 
     <!-- Skills Grid -->
     <div class="grid md:grid-cols-2 gap-8">
-      <!-- Photoshop
-      <div>
-        <h3 class="font-semibold text-gray-100">Photoshop <span class="float-right">75%</span></h3>
-        <div class="w-full bg-gray-200 rounded-full h-3 mt-2 overflow-hidden">
-          <div class="bg-gradient-to-r from-[#2a3950] to-[#1e3a8a] h-3 rounded-full w-[75%] transition-all duration-700 animate-pulse"></div>
-        </div>
-      </div> -->
 
       <!-- PHP -->
       <div>
@@ -363,20 +389,6 @@
 
     <!-- Accordion -->
     <div class="space-y-3">
-
-      <!-- <div x-data="{ open: false }" class="border border-[#2a3950]/20 rounded-md overflow-hidden shadow-md">
-        <button @click="open = !open" 
-          class="w-full flex justify-between items-center px-4 py-3 bg-[#2a3950] text-white hover:bg-[#1e2b3c] transition">
-          <span class="font-semibold">Units in Bachelor of Secondary Education</span>
-          <span x-text="open ? '−' : '+' " class="text-xl font-bold"></span>
-        </button>
-        <div x-show="open" x-collapse class="px-4 py-3 bg-white text-gray-700">
-          <div class="grid md:grid-cols-2 gap-4">
-            <p>Fullbright College  February 2025 - June 2025</p>
-            <p>San Jose, Puerto Princesa City,</p>
-          </div>
-        </div>
-      </div> -->
 
       <!-- Bachelor -->
       <div x-data="{ open: false }" class="border border-[#2a3950]/20 rounded-md overflow-hidden shadow-md">
@@ -451,8 +463,6 @@
 
     <!-- Experience Grid -->
     <div class="grid gap-8 md:grid-cols-2">
-
-
 
       <div class="bg-gradient-to-b from-[#E6EEF3] to-[#BFD2E0] shadow-md rounded-lg p-6 text-center hover:shadow-xl transition">
         <div class="flex justify-center mb-4">
@@ -530,7 +540,6 @@
         </p>
       </div>
 
-
         <!-- Card -->
       <div class="bg-gradient-to-b from-[#E6EEF3] to-[#BFD2E0] shadow-md rounded-lg p-6 text-center hover:shadow-xl transition">
         <div class="flex justify-center mb-4">
@@ -545,9 +554,6 @@
           Creating websites and Web application, accepting capstone project commission
         </p>
       </div>
-
-
-      <!-- Keep adding more cards here -->
 
     </div>
   </div>
@@ -822,6 +828,8 @@
 <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
 <script src="./js/main.js"></script>
 <script src="./js/conn.js"></script>
- <script src="./js/canvas.js"></script>
+<script src="./js/canvas.js"></script>
+
+
 </body>
 </html>

@@ -202,3 +202,26 @@ type();
   animate();
 })();
 
+
+(function () {
+  const toggle = document.getElementById('theme-toggle');
+  if (!toggle) return;
+
+  // Always default to dark — only go light if user explicitly chose it before
+  document.body.classList.remove('light-mode');
+  toggle.classList.remove('is-light');
+
+  // Clear any stale 'light' saved from before if user never explicitly set it
+  if (localStorage.getItem('theme') === 'light') {
+    document.body.classList.add('light-mode');
+    toggle.classList.add('is-light');
+  } else {
+    localStorage.setItem('theme', 'dark');
+  }
+
+  toggle.addEventListener('click', function () {
+    const isLight = document.body.classList.toggle('light-mode');
+    toggle.classList.toggle('is-light', isLight);
+    localStorage.setItem('theme', isLight ? 'light' : 'dark');
+  });
+})();
