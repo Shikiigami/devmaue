@@ -120,7 +120,7 @@
 .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 [x-cloak] { display: none !important; }
 
-* { cursor: none !important; }
+* { cursor: auto !important; }
 
 
   /* ── Social icons: base (desktop) ── */
