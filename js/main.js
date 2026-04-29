@@ -310,74 +310,24 @@ document.addEventListener('DOMContentLoaded', function () {
     if (shiftCount >= 3) { shiftCount = 0; openAdmin(); }
   });
 
-  // ── Snap detection (FIXED) ──
+  // ── Logo triple-click to open admin ──
   let snapCooldown = false;
+  let logoClickCount = 0, logoClickTimer = null;
 
   function initSnap() {
-    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-      console.warn('[snap] getUserMedia not available');
-      return;
-    }
+    const logo = document.querySelector('nav a[href="#home"] img');
+    if (!logo) return;
 
-    navigator.mediaDevices.getUserMedia({ audio: true, video: false })
-      .then(stream => {
-        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        const source   = audioCtx.createMediaStreamSource(stream);
-        const analyser = audioCtx.createAnalyser();
+    logo.addEventListener('click', function (e) {
+      logoClickCount++;
+      clearTimeout(logoClickTimer);
+      logoClickTimer = setTimeout(() => { logoClickCount = 0; }, 600);
 
-        // Key settings: no smoothing so we catch raw transient spikes
-        analyser.fftSize               = 512;
-        analyser.smoothingTimeConstant = 0;
-
-        source.connect(analyser);
-
-        const buf      = new Uint8Array(analyser.frequencyBinCount);
-        let noiseFloor = 5;
-        let frameCount = 0;
-
-        function rms(data) {
-          let sum = 0;
-          for (let i = 0; i < data.length; i++) sum += data[i] * data[i];
-          return Math.sqrt(sum / data.length);
-        }
-
-        function detect() {
-          analyser.getByteFrequencyData(buf);
-          const level = rms(buf);
-          frameCount++;
-
-          // Update noise floor slowly every 30 frames
-          if (frameCount % 30 === 0) {
-            noiseFloor = noiseFloor * 0.85 + level * 0.15;
-          }
-
-          // Snap threshold: must be at least 4× background noise, min 12
-          const threshold = Math.max(noiseFloor * 4, 12);
-
-          if (level > threshold && !snapCooldown) {
-            const peakLevel = level;
-
-            // Check ~50ms later — snap decays very fast
-            setTimeout(() => {
-              analyser.getByteFrequencyData(buf);
-              const after = rms(buf);
-
-              // If sound dropped to <60% of peak → it was a snap (sharp transient)
-              if (after < peakLevel * 0.6) {
-                triggerSnap();
-              }
-            }, 50);
-          }
-
-          requestAnimationFrame(detect);
-        }
-
-        detect();
-        console.log('[snap] 🎤 Mic active — snap your fingers near the mic!');
-      })
-      .catch(err => {
-        console.warn('[snap] Mic denied:', err.message, '— use Shift×3 instead');
-      });
+      if (logoClickCount >= 3) {
+        logoClickCount = 0;
+        triggerSnap();
+      }
+    });
   }
 
   function triggerSnap() {
