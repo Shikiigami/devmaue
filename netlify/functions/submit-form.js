@@ -1,18 +1,23 @@
-import { Client } from "pg";
+const { Client } = require("pg");
 
-export async function handler(event, context) {
-  if (event.httpMethod !== "POST") {
-    return {
-      statusCode: 405,
-      body: JSON.stringify({ message: "Method Not Allowed" })
-    };
+const CONNECTION_STRING = process.env.DATABASE_URL;
+
+exports.handler = async function(event, context) {
+  const headers = {
+    'Access-Control-Allow-Origin': '*',
+    'Content-Type': 'application/json'
+  };
+
+  if (event.httpMethod !== 'POST') {
+    return { statusCode: 405, headers, body: JSON.stringify({ message: 'Method Not Allowed' }) };
   }
 
+  let client;
   try {
     const data = JSON.parse(event.body);
 
-    const client = new Client({
-      connectionString: 'postgresql://neondb_owner:npg_oF3KVPWzdAm8@ep-tiny-credit-aejm8qsz-pooler.c-2.us-east-2.aws.neon.tech/neondb?sslmode=require&channel_binding=require',
+    client = new Client({
+      connectionString: CONNECTION_STRING,
       ssl: { rejectUnauthorized: false }
     });
 
@@ -21,17 +26,20 @@ export async function handler(event, context) {
       "INSERT INTO messages(name, email, message, created_at) VALUES($1, $2, $3, now())",
       [data.name, data.email, data.message]
     );
-    await client.end();
 
     return {
       statusCode: 200,
-      body: JSON.stringify({ success: true, message: "Data saved!" })
+      headers,
+      body: JSON.stringify({ success: true, message: "Message sent!" })
     };
   } catch (err) {
     console.error(err);
     return {
       statusCode: 500,
-      body: JSON.stringify({ success: false, message: "Error saving data" })
+      headers,
+      body: JSON.stringify({ success: false, message: err.message })
     };
+  } finally {
+    if (client) await client.end();
   }
 }
