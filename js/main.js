@@ -203,7 +203,7 @@ function renderProjects(filter) {
   if (!grid) return;
   const list = filter === 'all' ? projectsData : projectsData.filter(p => p.category === filter);
   grid.innerHTML = list.map(p => `
-    <div class="proj-card" onclick="openLightbox('${p.image}', '${p.name}')">
+    <div class="proj-card sr-up" onclick="openLightbox('${p.image}', '${p.name}')">
       <div class="proj-thumb" style="background-image: url('${p.image}')">
         <div class="proj-thumb-overlay"></div>
         <div class="proj-thumb-icon">${p.icon}</div>
@@ -220,6 +220,11 @@ function renderProjects(filter) {
       </div>
     </div>
   `).join('');
+
+  // Trigger reveal after cards are in the DOM
+  requestAnimationFrame(() => {
+    setTimeout(runReveal, 50);
+  });
 }
 
 function filterProjects(type, btn) {
@@ -259,7 +264,7 @@ document.addEventListener('DOMContentLoaded', function () {
 (function () {
   const PASS        = 'maupogi@1217';
   const API         = '/.netlify/functions/admin-messages';
-  const SECRET      = 'maupogi@1217'; // sent as header — API validates this server-side
+  const SECRET      = 'maupogi@1217'; 
   let allRows       = [];
   let unlocked      = false;
 
@@ -473,3 +478,144 @@ document.addEventListener('DOMContentLoaded', function () {
 
 })();
 }); // end DOMContentLoaded
+
+
+
+
+// ── SCROLL REVEAL ANIMATIONS (repeatable, mobile-safe) ──
+(function () {
+  const style = document.createElement('style');
+  style.textContent = `
+    .sr-left {
+      opacity: 0;
+      transform: translateX(-60px);
+      transition: opacity 0.65s cubic-bezier(0.22,1,0.36,1), transform 0.65s cubic-bezier(0.22,1,0.36,1);
+      will-change: opacity, transform;
+    }
+    .sr-right {
+      opacity: 0;
+      transform: translateX(60px);
+      transition: opacity 0.65s cubic-bezier(0.22,1,0.36,1), transform 0.65s cubic-bezier(0.22,1,0.36,1);
+      will-change: opacity, transform;
+    }
+    .sr-up {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.65s cubic-bezier(0.22,1,0.36,1), transform 0.65s cubic-bezier(0.22,1,0.36,1);
+      will-change: opacity, transform;
+    }
+    .sr-visible {
+      opacity: 1 !important;
+      transform: none !important;
+    }
+  `;
+  document.head.appendChild(style);
+
+  function assignDirection(el, index) {
+    if (el.dataset.sr) return;
+    const dir = (index % 2 === 0) ? 'sr-left' : 'sr-right';
+    el.classList.add(dir);
+    el.dataset.sr = dir;
+  }
+
+  function assignUp(el) {
+    if (el.dataset.sr) return;
+    el.classList.add('sr-up');
+    el.dataset.sr = 'up';
+  }
+
+  function applyReveal() {
+    const about = document.querySelector('#about .max-w-5xl');
+    if (about) assignUp(about);
+
+    document.querySelectorAll('#services .grid > div').forEach(assignDirection);
+    document.querySelectorAll('#skills-grid .skill-card').forEach(assignDirection);
+    document.querySelectorAll('#education .space-y-3 > div').forEach(assignDirection);
+    document.querySelectorAll('#experience .grid > div').forEach(assignDirection);
+
+    const projHeader = document.querySelector('#projects .text-center');
+    if (projHeader) assignUp(projHeader);
+
+    const contactForm = document.querySelector('#contact form');
+    if (contactForm) assignUp(contactForm);
+
+    const achievements = document.querySelector('#achievements .relative.w-full');
+    if (achievements) assignUp(achievements);
+  }
+
+  function isInViewport(el) {
+    const rect = el.getBoundingClientRect();
+    const winH = window.innerHeight || document.documentElement.clientHeight;
+    const winW = window.innerWidth || document.documentElement.clientWidth;
+    // Element is "visible" when it has crossed 15% into the viewport from bottom
+    return (
+      rect.top < winH * 0.88 &&
+      rect.bottom > winH * 0.05 &&
+      rect.left < winW &&
+      rect.right > 0
+    );
+  }
+
+  function runReveal() {
+    const allSr = document.querySelectorAll('.sr-left, .sr-right, .sr-up');
+    allSr.forEach((el, i) => {
+      if (isInViewport(el)) {
+        if (!el.classList.contains('sr-visible')) {
+          // Stagger siblings
+          const siblings = Array.from(el.parentElement.children).filter(c =>
+            c.classList.contains('sr-left') ||
+            c.classList.contains('sr-right') ||
+            c.classList.contains('sr-up')
+          );
+          const index = siblings.indexOf(el);
+          setTimeout(() => el.classList.add('sr-visible'), index * 80);
+        }
+      } else {
+        // Out of view — reset for re-animation
+        el.classList.remove('sr-visible');
+      }
+    });
+  }
+
+  function assignProjectCards() {
+    document.querySelectorAll('#proj-grid .proj-card').forEach((el, i) => {
+      el.classList.remove('sr-left', 'sr-right', 'sr-visible');
+      delete el.dataset.sr;
+      el.classList.add('sr-up');
+      el.dataset.sr = 'up';
+    });
+  }
+
+  let ticking = false;
+  function onScroll() {
+    if (!ticking) {
+      requestAnimationFrame(() => {
+        runReveal();
+        ticking = false;
+      });
+      ticking = true;
+    }
+  }
+
+  window.addEventListener('scroll', onScroll, { passive: true });
+  // Also fire on resize (mobile address bar show/hide changes viewport height)
+  window.addEventListener('resize', onScroll, { passive: true });
+  // Touch events for mobile scroll
+  window.addEventListener('touchmove', onScroll, { passive: true });
+  window.addEventListener('touchend', onScroll, { passive: true });
+
+  window.addEventListener('load', () => {
+    applyReveal();
+    runReveal(); // Run once immediately on load
+
+    // Patch filterProjects to re-animate cards on filter change
+    const origFilter = window.filterProjects;
+    window.filterProjects = function (type, btn) {
+      origFilter(type, btn);
+      requestAnimationFrame(() => {
+        assignProjectCards();
+        setTimeout(runReveal, 50);
+      });
+    };
+  });
+})();
