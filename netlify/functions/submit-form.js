@@ -1,8 +1,9 @@
-const { Client } = require("pg");
+import pg from "pg";
+const { Client } = pg;
 
 const CONNECTION_STRING = process.env.DATABASE_URL;
 
-exports.handler = async function(event, context) {
+export const handler = async function(event, context) {
   const headers = {
     'Access-Control-Allow-Origin': '*',
     'Content-Type': 'application/json'
