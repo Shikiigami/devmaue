@@ -83,6 +83,7 @@ const skills = [
   { name: "MySQL",         pct: 85, color: "#4479a1", icon: '<i class="devicon-mysql-plain colored" style="font-size:30px"></i>' },
   { name: "Communication", pct: 95, color: "#22c55e", icon: '<i class="fa-solid fa-comments" style="font-size:26px; color:#22c55e"></i>' },
   { name: "Firebase",      pct: 90, color: "#ffca28", icon: '<i class="devicon-firebase-plain colored" style="font-size:30px"></i>' },
+  { name: "Supabase",      pct: 80, color: "#3ecf8e", icon: '<svg width="26" height="26" viewBox="0 0 109 113" fill="none"><path d="M63.7 110.3c-2.9 3.6-8.7 1.6-8.8-3L53.9 40.1h45.3c8.2 0 12.7 9.5 7.6 15.9L63.7 110.3z" fill="#3ecf8e"/><path d="M45.3 2.1c2.9-3.6 8.7-1.6 8.8 3l.4 67.2H9.8C1.6 72.3-2.9 62.8 2.2 56.4L45.3 2.1z" fill="#3ecf8e" fill-opacity="0.7"/></svg>' },
 ];
 
 const grid = document.getElementById('skills-grid');
