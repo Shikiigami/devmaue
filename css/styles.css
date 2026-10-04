@@ -766,6 +766,7 @@ body.light-mode .bar-track {
 .tag-vue    { background: #0d2a16; color: #86efac; }
 .tag-mysql  { background: #2a2200; color: #fde68a; }
 .tag-angular { background: #2a0a0a; color: #f87171; } /* deep red — matches Angular's brand */
+.tag-supabase { background: #0d2a1f; color: #6ee7b7; }
 .proj-year  { font-size: 10px; color: #64748b; }
 .active-filter {
   background: rgba(59,130,246,0.12) !important;

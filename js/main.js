@@ -117,11 +117,29 @@ requestAnimationFrame(() => {
 // ── PROJECTS SECTION ──
 const projectsData = [
   {
+    name: "HTU Educational Database Gateway",
+    desc: "Research repository for Holy Trinity University where students, faculty, and researchers can search, read, and submit theses, studies, and scholarly work. Browse by subject area and explore the university's research agenda.",
+    image: "./images/htu.png",
+    tags: [{ label: "React", cls: "tag-react" }, { label: "Supabase", cls: "tag-supabase" }],
+    year: "2026",
+    category: "fullstack",
+    icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fde68a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5a2 2 0 012-2h5l2 2h9a2 2 0 012 2v11a2 2 0 01-2 2H4a2 2 0 01-2-2z"/><path d="M8 13h8M8 17h5"/></svg>`
+  },
+  {
+    name: "Genesis - Pet Adoption & Shelter Management",
+    desc: "Pet adoption and shelter management platform for Puerto Princesa, Palawan. Adopters can browse and filter available pets by species, gender, size, and vaccination status, while shelters manage listings, rehoming requests, and messages.",
+    image: "./images/genesis.png",
+    tags: [{ label: "React", cls: "tag-react" }, { label: "Firebase", cls: "tag-firebase" }],
+    year: "2026",
+    category: "fullstack",
+    icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#86efac" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="10" r="1.6"/><circle cx="10" cy="5.5" r="1.6"/><circle cx="14" cy="5.5" r="1.6"/><circle cx="18" cy="10" r="1.6"/><path d="M12 12c-2.5 0-5 3.2-5 5.2 0 1.6 1.2 2.3 2.4 2.3 1 0 1.6-.5 2.6-.5s1.6.5 2.6.5c1.2 0 2.4-.7 2.4-2.3 0-2-2.5-5.2-5-5.2z"/></svg>`
+  },
+  {
     name: "Mark Anthony Dalope Dental Clinic",
     desc: "Full-stack dental clinic management system featuring patient records management and Inventory management.",
     image: "./images/mddc.png",
     tags: [{ label: "React", cls: "tag-react" }, { label: "Firebase", cls: "tag-firebase" }],
-    year: "2024",
+    year: "2026",
     category: "system",
     icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5eead4" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
       <path d="M12 2C9.5 2 7 4 7 6.5c0 1.5.5 2.8.5 4.5 0 2.5-.5 5-.5 7 0 1.7 1 3 2.5 3 1 0 1.8-.8 2.5-2 .7 1.2 1.5 2 2.5 2 1.5 0 2.5-1.3 2.5-3 0-2-.5-4.5-.5-7 0-1.7.5-3 .5-4.5C17 4 14.5 2 12 2z"/>
@@ -133,7 +151,7 @@ const projectsData = [
     desc: "Web-based system for tracking document routing and status across departments. Digitizes request workflows, reduces paper trail, and provides real-time visibility into document progress.",
     image: "./images/dts.png",
     tags: [{ label: "React", cls: "tag-react" }, { label: "Firebase", cls: "tag-firebase" }, { label: "AngularJs", cls: "tag-angular" }],
-    year: "2024",
+    year: "2026",
     category: "system",
     icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#93c5fd" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
       <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
@@ -141,6 +159,15 @@ const projectsData = [
       <circle cx="12" cy="13" r="1.5" fill="#93c5fd" stroke="none"/>
       <path d="M12 11c-1.7 0-3 1.2-3 2.7 0 2 3 5.3 3 5.3s3-3.3 3-5.3C15 12.2 13.7 11 12 11z"/>
     </svg>`
+  },
+  {
+    name: "SkiniqueSys",
+    desc: "Payroll system with product formulation module for Skinique Manufacturing Corporation.",
+    image: "./images/skinique.png",
+    tags: [{ label: "PHP", cls: "tag-php" }, { label: "Laravel", cls: "tag-laravel" }, { label: "MySQL", cls: "tag-mysql" }],
+    year: "2025",
+    category: "fullstack",
+    icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fca5a5" stroke-width="1.8"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M9 7h6M9 11h6M9 15h4"/></svg>`
   },
   {
     name: "Library Procurement System",
@@ -186,15 +213,6 @@ const projectsData = [
     year: "2023",
     category: "system",
     icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#93c5fd" stroke-width="1.8"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>`
-  },
-  {
-    name: "SkiniqueSys",
-    desc: "Payroll system with product formulation module for Skinique Manufacturing Corporation.",
-    image: "./images/skinique.png",
-    tags: [{ label: "PHP", cls: "tag-php" }, { label: "Laravel", cls: "tag-laravel" }, { label: "MySQL", cls: "tag-mysql" }],
-    year: "2025",
-    category: "fullstack",
-    icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fca5a5" stroke-width="1.8"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M9 7h6M9 11h6M9 15h4"/></svg>`
   }
 ];
 
