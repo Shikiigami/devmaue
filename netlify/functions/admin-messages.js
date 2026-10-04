@@ -1,4 +1,5 @@
-const { Client } = require("pg");
+import pg from "pg";
+const { Client } = pg;
 
 const CONNECTION_STRING = process.env.DATABASE_URL;
 const ADMIN_SECRET      = process.env.ADMIN_SECRET;
@@ -12,7 +13,7 @@ async function getClient() {
   return client;
 }
 
-exports.handler = async function(event, context) {
+export const handler = async function(event, context) {
   const headers = {
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Headers': 'Content-Type, x-admin-token',
