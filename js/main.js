@@ -281,9 +281,8 @@ document.addEventListener('keydown', e => {
 // ── ADMIN PANEL ──
 document.addEventListener('DOMContentLoaded', function () {
 (function () {
-  const PASS        = 'maupogi@1217';
   const API         = '/.netlify/functions/admin-messages';
-  const SECRET      = 'maupogi@1217'; 
+  let SECRET        = ''; // typed password, kept in memory only; verified server-side against ADMIN_SECRET
   let allRows       = [];
   let unlocked      = false;
 
@@ -443,21 +442,33 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   // ── Password ──
-  function tryUnlock() {
+  function wrongPassword() {
+    pwInput.classList.add('adm-wrong');
+    setTimeout(() => pwInput.classList.remove('adm-wrong'), 600);
+    pwInput.value = '';
+  }
+  async function tryUnlock() {
     if (verifying || unlocked) return;
-    if (pwInput.value === PASS) {
-      verifying = true;
-      playVerifyAnimation(pwInput.value.length, () => {
-        unlocked = true;
-        lockEl.classList.add('adm-unlocked');
-        setTimeout(() => { lockEl.style.display = 'none'; }, 420);
-        admRefresh();
-      });
-    } else {
-      pwInput.classList.add('adm-wrong');
-      setTimeout(() => pwInput.classList.remove('adm-wrong'), 600);
-      pwInput.value = '';
+    const typed = pwInput.value;
+    if (!typed) return wrongPassword();
+    verifying = true;
+    let ok = false;
+    try {
+      const res = await fetch(API, { headers: { 'x-admin-token': typed } });
+      ok = res.ok;
+    } catch (e) { ok = false; }
+    if (!ok) {
+      verifying = false;
+      return wrongPassword();
     }
+    SECRET = typed;
+    pwInput.value = '';
+    playVerifyAnimation(typed.length, () => {
+      unlocked = true;
+      lockEl.classList.add('adm-unlocked');
+      setTimeout(() => { lockEl.style.display = 'none'; }, 420);
+      admRefresh();
+    });
   }
   pwBtn.addEventListener('click', tryUnlock);
   pwInput.addEventListener('keydown', e => { if (e.key === 'Enter') tryUnlock(); });
