@@ -308,13 +308,151 @@ document.addEventListener('DOMContentLoaded', function () {
   closeBtn.addEventListener('click', closeAdmin);
   overlay.addEventListener('click', e => { if (e.target === overlay) closeAdmin(); });
 
+  // ── Verify animation: tiles curl onto an orbit, spin 1¼ turns, screw down into one verified tile ──
+  let verifying = false;
+
+  // Synthesized sounds (Web Audio, no files): soft rising pluck arpeggio while spinning, sparkly chime on the check
+  function playVerifySounds(DUR) {
+    const AC = window.AudioContext || window.webkitAudioContext;
+    if (!AC) return;
+    let ctx;
+    try { ctx = new AC(); } catch (e) { return; }
+    if (ctx.state === 'suspended') ctx.resume();
+    const master = ctx.createGain();
+    master.gain.value = 0.22;
+    master.connect(ctx.destination);
+
+    function tone(freq, start, len, type, vol) {
+      const t0 = ctx.currentTime + start / 1000;
+      const o = ctx.createOscillator(), g = ctx.createGain();
+      o.type = type; o.frequency.value = freq;
+      g.gain.setValueAtTime(0.0001, t0);
+      g.gain.exponentialRampToValueAtTime(vol, t0 + 0.015);
+      g.gain.exponentialRampToValueAtTime(0.0001, t0 + len / 1000);
+      o.connect(g); g.connect(master);
+      o.start(t0); o.stop(t0 + len / 1000 + 0.05);
+    }
+
+    // Spin: pentatonic arpeggio climbing up, speeding up (C major pentatonic)
+    const scale = [523.25, 587.33, 659.25, 783.99, 880, 1046.5, 1174.66, 1318.5, 1567.98];
+    const spinStart = DUR * 0.45, spinEnd = DUR - 150;
+    let t = spinStart, step = 150, i = 0;
+    while (t < spinEnd && i < scale.length) {
+      tone(scale[i], t, 220, 'triangle', 0.5);
+      t += step; step *= 0.86; i++;
+    }
+    // soft whoosh sweep under the spin
+    const w0 = ctx.currentTime + spinStart / 1000, wl = (spinEnd - spinStart) / 1000;
+    const wo = ctx.createOscillator(), wg = ctx.createGain();
+    wo.type = 'sine';
+    wo.frequency.setValueAtTime(220, w0);
+    wo.frequency.exponentialRampToValueAtTime(880, w0 + wl);
+    wg.gain.setValueAtTime(0.0001, w0);
+    wg.gain.exponentialRampToValueAtTime(0.12, w0 + wl * 0.8);
+    wg.gain.exponentialRampToValueAtTime(0.0001, w0 + wl + 0.1);
+    wo.connect(wg); wg.connect(master);
+    wo.start(w0); wo.stop(w0 + wl + 0.15);
+
+    // Check: cute two-note "ding-ding" + sparkle
+    const c = DUR - 150;
+    tone(1318.5, c, 450, 'sine', 0.7);
+    tone(1760,   c + 110, 600, 'sine', 0.7);
+    tone(2637,   c + 110, 400, 'triangle', 0.18);
+    tone(3136,   c + 230, 350, 'sine', 0.12);
+
+    setTimeout(() => ctx.close && ctx.close(), DUR + 1500);
+  }
+
+  function playVerifyAnimation(count, done) {
+    const title = lockEl.querySelector('h3');
+    lockEl.classList.add('adm-verifying');
+    title.textContent = 'VERIFYING…';
+
+    const stage = document.createElement('div');
+    stage.id = 'adm-verify-stage';
+    const orbit = document.createElement('div');
+    orbit.className = 'adm-orbit';
+    stage.appendChild(orbit);
+    const final = document.createElement('div');
+    final.className = 'adm-final';
+    final.textContent = '✓';
+    stage.appendChild(final);
+    lockEl.insertBefore(stage, title.nextSibling);
+
+    const n = Math.min(count, 14), R = 62, size = 22, gap = 6, DUR = 2200;
+    const rowW = n * size + (n - 1) * gap;
+    const tiles = [];
+    for (let i = 0; i < n; i++) {
+      const t = document.createElement('span');
+      t.className = 'adm-tile';
+      orbit.appendChild(t);
+      tiles.push(t);
+    }
+
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches || !tiles[0].animate) {
+      tiles.forEach(t => t.remove());
+      final.classList.add('adm-final-on');
+      title.textContent = 'ACCESS GRANTED';
+      setTimeout(done, 500);
+      return;
+    }
+
+    playVerifySounds(DUR);
+
+    tiles.forEach((t, i) => {
+      const rx = -rowW / 2 + size / 2 + i * (size + gap);
+      const a = (i / n) * Math.PI * 2 - Math.PI / 2;
+      const ox = Math.cos(a) * R, oy = Math.sin(a) * R;
+      t.animate([
+        { offset: 0,    transform: `translate(${rx}px,0) scale(.2)`,        opacity: 0 },
+        { offset: 0.12, transform: `translate(${rx}px,0) scale(1)`,         opacity: 1 },
+        { offset: 0.32, transform: `translate(${rx}px,0) scale(1)`,         opacity: 1 },
+        { offset: 0.5,  transform: `translate(${ox}px,${oy}px) scale(1)`,   opacity: 1, easing: 'cubic-bezier(.6,0,.4,1)' },
+        { offset: 0.8,  transform: `translate(${ox}px,${oy}px) scale(1)`,   opacity: 1 },
+        { offset: 1,    transform: 'translate(0,0) scale(.2)',              opacity: 0 }
+      ], { duration: DUR, fill: 'forwards', easing: 'ease-in-out' });
+    });
+
+    // The turn is two keyframes: spin the hub 450° while tiles sit on the orbit
+    orbit.animate([
+      { offset: 0,    transform: 'rotate(0deg)' },
+      { offset: 0.45, transform: 'rotate(0deg)' },
+      { offset: 1,    transform: 'rotate(450deg)', easing: 'cubic-bezier(.5,0,.3,1)' }
+    ], { duration: DUR, fill: 'forwards' });
+
+    const HOLD = 2000; // pause on "ACCESS GRANTED" before the data shows
+    setTimeout(() => {
+      final.classList.add('adm-final-on');
+      title.textContent = 'ACCESS GRANTED';
+      title.classList.add('adm-granted');
+      // sparkle burst around the check
+      for (let k = 0; k < 12; k++) {
+        const p = document.createElement('i');
+        p.className = 'adm-spark';
+        const ang = (k / 12) * Math.PI * 2, dist = 52 + (k % 2) * 22;
+        p.style.setProperty('--dx', Math.cos(ang) * dist + 'px');
+        p.style.setProperty('--dy', Math.sin(ang) * dist + 'px');
+        final.appendChild(p);
+      }
+      const sub = document.createElement('div');
+      sub.className = 'adm-sub';
+      sub.textContent = 'Loading your messages…';
+      lockEl.appendChild(sub);
+    }, DUR - 150);
+    setTimeout(done, DUR - 150 + HOLD);
+  }
+
   // ── Password ──
   function tryUnlock() {
+    if (verifying || unlocked) return;
     if (pwInput.value === PASS) {
-      unlocked = true;
-      lockEl.classList.add('adm-unlocked');
-      setTimeout(() => { lockEl.style.display = 'none'; }, 420);
-      admRefresh();
+      verifying = true;
+      playVerifyAnimation(pwInput.value.length, () => {
+        unlocked = true;
+        lockEl.classList.add('adm-unlocked');
+        setTimeout(() => { lockEl.style.display = 'none'; }, 420);
+        admRefresh();
+      });
     } else {
       pwInput.classList.add('adm-wrong');
       setTimeout(() => pwInput.classList.remove('adm-wrong'), 600);

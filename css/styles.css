@@ -1021,6 +1021,81 @@ body.light-mode #lightbox-close {
 }
 
 #adm-lock.adm-unlocked { opacity: 0; pointer-events: none; }
+
+/* ── Verify animation ── */
+#adm-lock.adm-verifying #adm-pw-input,
+#adm-lock.adm-verifying #adm-pw-hint,
+#adm-lock.adm-verifying #adm-pw-btn,
+#adm-lock.adm-verifying #adm-lock-icon { display: none; }
+#adm-verify-stage {
+  position: relative; width: 160px; height: 160px;
+}
+.adm-orbit, .adm-final {
+  position: absolute; left: 50%; top: 50%;
+  width: 0; height: 0;
+}
+.adm-tile {
+  position: absolute; left: -11px; top: -11px;
+  width: 22px; height: 22px; border-radius: 6px;
+  background: rgba(34,211,238,0.12);
+  border: 1px solid #22d3ee;
+  box-shadow: 0 0 10px #22d3ee66;
+  opacity: 0;
+}
+.adm-final::before {
+  content: '✓';
+  position: absolute; left: -26px; top: -26px;
+  width: 52px; height: 52px; border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.6rem; font-weight: 700; color: #4ade80;
+  background: rgba(74,222,128,0.12);
+  border: 1px solid #4ade80;
+  box-shadow: 0 0 22px #4ade8088;
+  transform: scale(0) rotate(-90deg); opacity: 0;
+  transition: transform .45s cubic-bezier(.3,1.6,.5,1), opacity .25s;
+}
+.adm-final { font-size: 0; }
+.adm-final.adm-final-on::before { transform: scale(1) rotate(0); opacity: 1; }
+#adm-lock.adm-verifying h3 { transition: color .3s, text-shadow .3s; }
+#adm-lock h3.adm-granted {
+  color: #4ade80; font-size: 1.15rem;
+  text-shadow: 0 0 14px #4ade80aa, 0 0 32px #4ade8055;
+  animation: adm-granted-in .6s cubic-bezier(.3,1.5,.5,1) both;
+}
+@keyframes adm-granted-in {
+  from { opacity: 0; transform: translateY(10px) scale(.85); letter-spacing: .4em; }
+  to   { opacity: 1; transform: none; letter-spacing: .15em; }
+}
+/* glowing ripple rings behind the check */
+.adm-final.adm-final-on::after {
+  content: ''; position: absolute; left: -26px; top: -26px;
+  width: 52px; height: 52px; border-radius: 14px;
+  border: 2px solid #4ade80;
+  animation: adm-ring 1.4s ease-out infinite;
+}
+@keyframes adm-ring {
+  from { transform: scale(1);   opacity: .8; }
+  to   { transform: scale(3.2); opacity: 0; }
+}
+.adm-final.adm-final-on::before { animation: adm-check-glow 1.6s ease-in-out .5s infinite; }
+@keyframes adm-check-glow {
+  50% { box-shadow: 0 0 36px #4ade80cc, 0 0 60px #4ade8055; }
+}
+.adm-spark {
+  position: absolute; left: -3px; top: -3px;
+  width: 6px; height: 6px; border-radius: 50%;
+  background: #bbf7d0; box-shadow: 0 0 8px #4ade80;
+  animation: adm-spark 1s ease-out forwards;
+}
+@keyframes adm-spark {
+  from { transform: translate(0,0) scale(1); opacity: 1; }
+  to   { transform: translate(var(--dx), var(--dy)) scale(0); opacity: 0; }
+}
+.adm-sub {
+  font-size: .75rem; color: #64748b; letter-spacing: .08em;
+  animation: adm-sub-in .5s ease .4s both;
+}
+@keyframes adm-sub-in { from { opacity: 0; } to { opacity: 1; } }
 #adm-lock-icon { font-size: 3rem; line-height: 1; }
 #adm-lock h3 {
   font-family: 'Orbitron', sans-serif;
