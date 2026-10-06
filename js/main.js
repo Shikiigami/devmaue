@@ -282,7 +282,7 @@ document.addEventListener('keydown', e => {
 document.addEventListener('DOMContentLoaded', function () {
 (function () {
   const API         = '/.netlify/functions/admin-messages';
-  let SECRET        = ''; // typed password, kept in memory only; verified server-side against ADMIN_SECRET
+  let SECRET        = ''; 
   let allRows       = [];
   let unlocked      = false;
 
