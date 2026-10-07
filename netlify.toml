@@ -1,2 +1,8 @@
 [build]
   functions = "netlify/functions"
+
+# Cache original images for a long time in the browser
+[[headers]]
+  for = "/images/*"
+  [headers.values]
+    Cache-Control = "public, max-age=604800"
