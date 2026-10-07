@@ -217,13 +217,18 @@ const projectsData = [
   }
 ];
 
+// Serve resized, modern-format images through Netlify Image CDN
+function cdnImage(src, w) {
+  return `/.netlify/images?url=${encodeURIComponent(src.replace(/^\./, ''))}&w=${w}`;
+}
+
 function renderProjects(filter) {
   const grid = document.getElementById('proj-grid');
   if (!grid) return;
   const list = filter === 'all' ? projectsData : projectsData.filter(p => p.category === filter);
   grid.innerHTML = list.map(p => `
-    <div class="proj-card sr-up" onclick="openLightbox('${p.image}', '${p.name}')">
-      <div class="proj-thumb" style="background-image: url('${p.image}')">
+    <div class="proj-card sr-up" onclick="openLightbox('${cdnImage(p.image, 1600)}', '${p.name}')">
+      <div class="proj-thumb" style="background-image: url('${cdnImage(p.image, 800)}')">
         <div class="proj-thumb-overlay"></div>
         <div class="proj-thumb-icon">${p.icon}</div>
       </div>
